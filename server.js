@@ -260,7 +260,7 @@ app.post('/api/result', async (req, res) => {
 结果是：${result}
 请给出回应`
             }],
-            temperature: 0.8,
+            temperature: 1.2,
             max_tokens: 50,
             top_p: 0.95,
             frequency_penalty: 0.6,

@@ -7,7 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
+    <!-- 添加背景装饰 -->
+    <div class="background-decoration">
+        <div class="gradient-blob blob-1"></div>
+        <div class="gradient-blob blob-2"></div>
+        <div class="gradient-blob blob-3"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <!-- 添加顶部导航栏 -->
+    <nav class="top-nav">
+        <div class="nav-content">
+            <h1>AI 石头剪刀布</h1>
+            <div class="nav-links">
+                <a href="#" class="active">游戏</a>
+                <a href="#">排行榜</a>
+                <a href="#">关于</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="game-container glass-morphism">
         <!-- 预告区域 -->
         <div class="hint-box">
             <input type="text" id="playerInput" placeholder="告诉AI你要出什么（可以骗它哦）...">
@@ -37,47 +57,64 @@
         <div class="choices">
             <button class="choice-btn" data-choice="石头">
                 <svg class="choice-svg rock" viewBox="0 0 100 100">
-                    <!-- 更精致的石头图案 -->
                     <defs>
                         <linearGradient id="rockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#8B8B8B"/>
-                            <stop offset="100%" style="stop-color:#4A4A4A"/>
+                            <stop offset="0%" style="stop-color:#8E8E93"/>
+                            <stop offset="100%" style="stop-color:#636366"/>
                         </linearGradient>
+                        <filter id="rockShadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                        </filter>
                     </defs>
-                    <circle cx="50" cy="50" r="45" fill="url(#rockGradient)"/>
-                    <path d="M30,45 Q50,25 70,45" fill="none" stroke="#333" stroke-width="2"/>
-                    <path d="M35,40 Q50,30 65,40" fill="none" stroke="#555" stroke-width="1.5"/>
-                    <path d="M40,35 Q50,28 60,35" fill="none" stroke="#666" stroke-width="1"/>
+                    <path d="M50,20 C60,20 70,25 75,35 C80,45 80,55 75,65 C70,75 60,80 50,80 C40,80 30,75 25,65 C20,55 20,45 25,35 C30,25 40,20 50,20" 
+                          fill="url(#rockGradient)" 
+                          filter="url(#rockShadow)"/>
+                    <path d="M35,45 Q50,35 65,45" fill="none" stroke="#FFF" stroke-width="2" opacity="0.5"/>
+                    <path d="M40,40 Q50,32 60,40" fill="none" stroke="#FFF" stroke-width="1.5" opacity="0.3"/>
                 </svg>
             </button>
             <button class="choice-btn" data-choice="剪刀">
                 <svg class="choice-svg scissors" viewBox="0 0 100 100">
-                    <!-- 更精致的剪刀图案 -->
                     <defs>
                         <linearGradient id="scissorsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#C0C0C0"/>
-                            <stop offset="100%" style="stop-color:#808080"/>
+                            <stop offset="0%" style="stop-color:#B4B4B6"/>
+                            <stop offset="100%" style="stop-color:#8E8E93"/>
                         </linearGradient>
+                        <filter id="scissorsShadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                        </filter>
                     </defs>
-                    <path d="M30,30 L70,70" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
-                    <path d="M70,30 L30,70" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
-                    <circle cx="35" cy="35" r="12" fill="#A0A0A0" stroke="#666" stroke-width="2"/>
-                    <circle cx="65" cy="65" r="12" fill="#A0A0A0" stroke="#666" stroke-width="2"/>
+                    <g filter="url(#scissorsShadow)">
+                        <path d="M35,35 L65,65" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M65,35 L35,65" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
+                        <circle cx="35" cy="35" r="12" fill="url(#scissorsGradient)"/>
+                        <circle cx="65" cy="65" r="12" fill="url(#scissorsGradient)"/>
+                        <circle cx="35" cy="35" r="6" fill="#FFF" opacity="0.5"/>
+                        <circle cx="65" cy="65" r="6" fill="#FFF" opacity="0.5"/>
+                    </g>
                 </svg>
             </button>
             <button class="choice-btn" data-choice="布">
                 <svg class="choice-svg paper" viewBox="0 0 100 100">
-                    <!-- 更精致的布图案 -->
                     <defs>
+                        <linearGradient id="paperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFFFFF"/>
+                            <stop offset="100%" style="stop-color:#F2F2F7"/>
+                        </linearGradient>
                         <pattern id="paperPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <path d="M0,0 L10,10 M10,0 L0,10" stroke="#F0F0F0" stroke-width="0.5"/>
+                            <path d="M0,5 L10,5 M5,0 L5,10" stroke="#E5E5EA" stroke-width="0.5"/>
                         </pattern>
+                        <filter id="paperShadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.2"/>
+                        </filter>
                     </defs>
-                    <rect x="15" y="15" width="70" height="70" fill="white" stroke="#666" stroke-width="2"/>
-                    <rect x="15" y="15" width="70" height="70" fill="url(#paperPattern)"/>
-                    <line x1="25" y1="35" x2="75" y2="35" stroke="#999" stroke-width="2"/>
-                    <line x1="25" y1="50" x2="75" y2="50" stroke="#999" stroke-width="2"/>
-                    <line x1="25" y1="65" x2="75" y2="65" stroke="#999" stroke-width="2"/>
+                    <g filter="url(#paperShadow)">
+                        <rect x="25" y="25" width="50" height="50" rx="5" fill="url(#paperGradient)"/>
+                        <rect x="25" y="25" width="50" height="50" rx="5" fill="url(#paperPattern)" opacity="0.5"/>
+                        <line x1="35" y1="40" x2="65" y2="40" stroke="#8E8E93" stroke-width="2"/>
+                        <line x1="35" y1="50" x2="65" y2="50" stroke="#8E8E93" stroke-width="2"/>
+                        <line x1="35" y1="60" x2="55" y2="60" stroke="#8E8E93" stroke-width="2"/>
+                    </g>
                 </svg>
             </button>
         </div>

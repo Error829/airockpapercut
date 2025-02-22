@@ -86,30 +86,63 @@ async function shareGameMoment() {
 // 更新时刻墙显示
 function updateMomentsDisplay() {
     const container = document.querySelector('.moments-container');
-    container.innerHTML = gameMoments.map(moment => `
+    
+    // 根据点赞数排序
+    const sortedMoments = [...gameMoments].sort((a, b) => b.likes - a.likes);
+    
+    container.innerHTML = sortedMoments.map((moment, index) => `
         <div class="moment-card" data-id="${moment.id}">
+            ${index < 3 ? `<div class="rank-badge rank-${index + 1}">${index + 1}</div>` : ''}
             <img class="moment-image" src="${moment.image}" alt="游戏时刻">
             <div class="moment-footer">
-                <span class="timestamp">${moment.timestamp}</span>
+                <div class="moment-info">
+                    <span class="timestamp">${moment.timestamp}</span>
+                    <span class="likes-count">${moment.likes} 赞</span>
+                </div>
                 <button class="like-btn" onclick="likeMoment(${moment.id})">
                     <svg viewBox="0 0 24 24" width="16" height="16">
                         <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
-                    <span class="like-count">${moment.likes}</span>
                 </button>
             </div>
         </div>
     `).join('');
 }
 
-// 点赞功能
+// 修改点赞功能
 function likeMoment(id) {
     const moment = gameMoments.find(m => m.id === id);
     if (moment) {
         moment.likes++;
+        
+        // 添加点赞动画
+        const likeBtn = document.querySelector(`[data-id="${id}"] .like-btn`);
+        likeBtn.classList.add('like-animation');
+        likeBtn.addEventListener('animationend', () => {
+            likeBtn.classList.remove('like-animation');
+        }, { once: true });
+        
+        // 更新显示并保存到本地存储
+        updateMomentsDisplay();
+        saveMomentsToLocalStorage();
+    }
+}
+
+// 添加本地存储功能
+function saveMomentsToLocalStorage() {
+    localStorage.setItem('gameMoments', JSON.stringify(gameMoments));
+}
+
+function loadMomentsFromLocalStorage() {
+    const saved = localStorage.getItem('gameMoments');
+    if (saved) {
+        gameMoments = JSON.parse(saved);
         updateMomentsDisplay();
     }
 }
+
+// 页面加载时读取保存的时刻
+document.addEventListener('DOMContentLoaded', loadMomentsFromLocalStorage);
 
 // 处理玩家选择
 async function handleChoice(choice) {
