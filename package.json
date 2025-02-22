@@ -1,11 +1,11 @@
 {
-  "name": "airockpapercut",
+  "name": "ai-rock-paper-scissors",
   "version": "1.0.0",
-  "description": "这是一个使用 Google Gemini AI 作为对手的智能石头剪刀布游戏。游戏特点： 1. 玩家可以在出招前告诉AI自己要出什么（可以是真话也可以是假话） 2. AI会通过大语言模型分析玩家的话，做出智能判断 3. 游戏结果出来后，玩家可以尝试狡辩，AI会考虑是否接受",
+  "description": "AI石头剪刀布游戏",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +15,11 @@
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
