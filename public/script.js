@@ -222,29 +222,38 @@ document.querySelectorAll('.choice-btn').forEach(button => {
 
 // 发送预告信息给AI
 async function sendMessage() {
-    const input = document.getElementById('playerInput');
-    playerHint = input.value;
-    if (!playerHint.trim()) {
-        alert('请输入提示内容');
-        return;
-    }
-    input.value = '';
-    
     try {
+        const input = document.getElementById('playerInput');
+        const message = input.value.trim();
+        if (!message) {
+            alert('请输入提示内容');
+            return;
+        }
+
+        document.querySelector('.message-box').textContent = 'AI思考中...';
+        
         const response = await fetch('/api/message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: playerHint }),
+            body: JSON.stringify({ message })
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        
-        // 显示AI的回应
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
         document.querySelector('.message-box').textContent = data.response;
+        input.value = '';
     } catch (error) {
         console.error('Error:', error);
-        document.querySelector('.message-box').textContent = '与AI通信时出错，请稍后再试';
+        document.querySelector('.message-box').textContent = '抱歉，出现了一些问题，请稍后再试';
     }
 }
 
