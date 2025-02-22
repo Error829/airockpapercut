@@ -5,7 +5,16 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 确保所有路由都能正确返回 index.html
+app.get('*', (req, res) => {
+    // 如果是 API 请求，跳过
+    if (req.path.startsWith('/api/')) {
+        return next();
+    }
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // 添加错误处理中间件
 app.use((err, req, res, next) => {
