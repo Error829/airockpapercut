@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI石头剪刀布</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="game-area">
+            <h1>来和AI玩石头剪刀布吧！</h1>
+            
+            <!-- 对话区域 -->
+            <div class="chat-area">
+                <input type="text" id="playerInput" placeholder="告诉AI你要出什么...（可选）">
+                <button onclick="sendMessage()">发送</button>
+            </div>
+
+            <!-- 选择区域 -->
+            <div class="choice-area">
+                <button class="choice-btn" onclick="makeChoice('石头')">
+                    <svg class="icon"><!-- 石头图标 --></svg>
+                    石头
+                </button>
+                <button class="choice-btn" onclick="makeChoice('剪刀')">
+                    <svg class="icon"><!-- 剪刀图标 --></svg>
+                    剪刀
+                </button>
+                <button class="choice-btn" onclick="makeChoice('布')">
+                    <svg class="icon"><!-- 布图标 --></svg>
+                    布
+                </button>
+            </div>
+
+            <!-- 结果显示区域 -->
+            <div class="result-area">
+                <p id="playerChoice"></p>
+                <p id="aiChoice"></p>
+                <p id="result"></p>
+            </div>
+
+            <!-- 狡辩区域 -->
+            <div class="argue-area" style="display: none;">
+                <input type="text" id="argueInput" placeholder="试试说服AI...">
+                <button onclick="argue()">狡辩</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
