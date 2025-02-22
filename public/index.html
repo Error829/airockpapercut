@@ -4,47 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI石头剪刀布</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="game-area">
-            <h1>来和AI玩石头剪刀布吧！</h1>
-            
-            <!-- 对话区域 -->
-            <div class="chat-area">
-                <input type="text" id="playerInput" placeholder="告诉AI你要出什么...（可选）">
-                <button onclick="sendMessage()">发送</button>
-            </div>
+    <div class="game-container">
+        <!-- 预告区域 -->
+        <div class="hint-box">
+            <input type="text" id="playerInput" placeholder="告诉AI你要出什么（可以骗它哦）...">
+            <button class="action-btn" onclick="sendMessage()">发送</button>
+        </div>
 
-            <!-- 选择区域 -->
-            <div class="choice-area">
-                <button class="choice-btn" onclick="makeChoice('石头')">
-                    <svg class="icon"><!-- 石头图标 --></svg>
-                    石头
-                </button>
-                <button class="choice-btn" onclick="makeChoice('剪刀')">
-                    <svg class="icon"><!-- 剪刀图标 --></svg>
-                    剪刀
-                </button>
-                <button class="choice-btn" onclick="makeChoice('布')">
-                    <svg class="icon"><!-- 布图标 --></svg>
-                    布
-                </button>
+        <div class="players">
+            <div class="player">
+                <h2>你的选择</h2>
+                <div class="choice-display player-choice">
+                    <div class="choice-icon">❓</div>
+                </div>
             </div>
+            <div class="vs">VS</div>
+            <div class="player">
+                <h2>AI的选择</h2>
+                <div class="choice-display ai-choice">
+                    <div class="choice-icon">❓</div>
+                </div>
+            </div>
+        </div>
 
-            <!-- 结果显示区域 -->
-            <div class="result-area">
-                <p id="playerChoice"></p>
-                <p id="aiChoice"></p>
-                <p id="result"></p>
-            </div>
+        <div class="chat-box">
+            <div class="message-box"></div>
+        </div>
 
-            <!-- 狡辩区域 -->
-            <div class="argue-area" style="display: none;">
-                <input type="text" id="argueInput" placeholder="试试说服AI...">
-                <button onclick="argue()">狡辩</button>
-            </div>
+        <div class="choices">
+            <button class="choice-btn" data-choice="石头">
+                <svg class="choice-svg rock" viewBox="0 0 100 100">
+                    <!-- 更精致的石头图案 -->
+                    <defs>
+                        <linearGradient id="rockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8B8B8B"/>
+                            <stop offset="100%" style="stop-color:#4A4A4A"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#rockGradient)"/>
+                    <path d="M30,45 Q50,25 70,45" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M35,40 Q50,30 65,40" fill="none" stroke="#555" stroke-width="1.5"/>
+                    <path d="M40,35 Q50,28 60,35" fill="none" stroke="#666" stroke-width="1"/>
+                </svg>
+            </button>
+            <button class="choice-btn" data-choice="剪刀">
+                <svg class="choice-svg scissors" viewBox="0 0 100 100">
+                    <!-- 更精致的剪刀图案 -->
+                    <defs>
+                        <linearGradient id="scissorsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#C0C0C0"/>
+                            <stop offset="100%" style="stop-color:#808080"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M30,30 L70,70" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M70,30 L30,70" stroke="url(#scissorsGradient)" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="35" cy="35" r="12" fill="#A0A0A0" stroke="#666" stroke-width="2"/>
+                    <circle cx="65" cy="65" r="12" fill="#A0A0A0" stroke="#666" stroke-width="2"/>
+                </svg>
+            </button>
+            <button class="choice-btn" data-choice="布">
+                <svg class="choice-svg paper" viewBox="0 0 100 100">
+                    <!-- 更精致的布图案 -->
+                    <defs>
+                        <pattern id="paperPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M0,0 L10,10 M10,0 L0,10" stroke="#F0F0F0" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect x="15" y="15" width="70" height="70" fill="white" stroke="#666" stroke-width="2"/>
+                    <rect x="15" y="15" width="70" height="70" fill="url(#paperPattern)"/>
+                    <line x1="25" y1="35" x2="75" y2="35" stroke="#999" stroke-width="2"/>
+                    <line x1="25" y1="50" x2="75" y2="50" stroke="#999" stroke-width="2"/>
+                    <line x1="25" y1="65" x2="75" y2="65" stroke="#999" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 狡辩区域 -->
+        <div class="argue-box" style="display: none;">
+            <input type="text" id="argueInput" placeholder="不服？试试说服AI...">
+            <button class="action-btn" onclick="argue()">狡辩</button>
         </div>
     </div>
     <script src="script.js"></script>

@@ -234,6 +234,79 @@ app.post('/api/argue', async (req, res) => {
     }
 });
 
+// 在 server.js 中添加新的结果处理路由
+app.post('/api/result', async (req, res) => {
+    try {
+        const { playerChoice, aiChoice, result } = req.body;
+        const response = await axios.post(API_URL, {
+            model: MODEL_NAME,
+            messages: [{
+                role: "system",
+                content: `你是一个傲娇又可爱的AI玩家。根据石头剪刀布的结果给出回应：
+1. 如果你赢了：要傲娇地炫耀，但不能太过分
+2. 如果你输了：要傲娇地表示不服或者勉强认输
+3. 如果平局：要表现出跃跃欲试想要再战的样子
+
+回应要求：
+- 带有表情符号
+- 带有语气词
+- 字数限制20字以内
+- 要可爱但不失气势`
+            }, {
+                role: "user",
+                content: `游戏结果：
+我出了：${aiChoice}
+对手出了：${playerChoice}
+结果是：${result}
+请给出回应`
+            }],
+            temperature: 0.8,
+            max_tokens: 50,
+            top_p: 0.95,
+            frequency_penalty: 0.6,
+            presence_penalty: 0.6,
+            response_format: { type: "text" }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let aiResponse = response.data.choices[0].message.content.trim();
+        
+        // 如果回应太长或没有表情符号，使用备用回应
+        if (aiResponse.length > 30 || !aiResponse.match(/[\u{1F300}-\u{1F9FF}]/u)) {
+            const backupResponses = {
+                'AI胜': [
+                    "哼哼～看来我技高一筹呢～😎",
+                    "果然还是我更厉害一点呢～🎯",
+                    "这就是AI的实力哦～😌"
+                ],
+                '玩家胜': [
+                    "哼！这次算你运气好～😤",
+                    "下次我可不会这么容易认输了～😼",
+                    "好啦好啦，你赢了啦～🙄"
+                ],
+                '平局': [
+                    "有意思，再来一局吧～🔄",
+                    "势均力敌呢，继续？😏",
+                    "这次算平手，下次可不会了～🎮"
+                ]
+            };
+            const responses = backupResponses[result] || backupResponses['平局'];
+            aiResponse = responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        res.json({ response: aiResponse });
+    } catch (error) {
+        console.error('结果处理出错:', error);
+        res.json({
+            response: "嘿嘿，有趣的对局呢～🎮"
+        });
+    }
+});
+
 // 端口配置
 const PORT = process.env.PORT || 3001; // 改为3001或其他可用端口
 
@@ -247,5 +320,23 @@ const server = app.listen(PORT, () => {
         server.listen(PORT + 1);
     } else {
         console.error('服务器启动错误:', err);
+    }
+});
+
+// 修改错误处理部分
+app.use((err, req, res, next) => {
+    console.error('服务器错误:', err);
+    res.status(500).json({
+        response: '服务器出错了，请稍后再试～😅',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
+
+// 添加通用的请求超时设置
+const axiosInstance = axios.create({
+    timeout: 15000,
+    headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json'
     }
 }); 
