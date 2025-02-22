@@ -41,6 +41,76 @@ function determineWinner(playerChoice, aiChoice) {
     return winConditions[playerChoice] === aiChoice ? 'player' : 'ai';
 }
 
+// 存储游戏时刻
+let gameMoments = [];
+
+// 分享游戏时刻
+async function shareGameMoment() {
+    try {
+        // 获取游戏区域的截图
+        const gameArea = document.querySelector('.game-container');
+        const canvas = await html2canvas(gameArea, {
+            backgroundColor: null,
+            scale: 2, // 提高图片质量
+            logging: false,
+            // 只截取主要游戏区域
+            height: document.querySelector('.choices').offsetTop + 
+                    document.querySelector('.choices').offsetHeight
+        });
+
+        // 将canvas转换为图片URL
+        const imageUrl = canvas.toDataURL('image/png');
+
+        // 创建新的时刻卡片
+        const moment = {
+            id: Date.now(),
+            image: imageUrl,
+            likes: 0,
+            timestamp: new Date().toLocaleString()
+        };
+
+        // 添加到时刻列表
+        gameMoments.unshift(moment);
+        
+        // 更新显示
+        updateMomentsDisplay();
+
+        // 隐藏分享按钮
+        document.querySelector('.share-box').style.display = 'none';
+    } catch (error) {
+        console.error('分享失败:', error);
+        alert('分享失败，请稍后重试');
+    }
+}
+
+// 更新时刻墙显示
+function updateMomentsDisplay() {
+    const container = document.querySelector('.moments-container');
+    container.innerHTML = gameMoments.map(moment => `
+        <div class="moment-card" data-id="${moment.id}">
+            <img class="moment-image" src="${moment.image}" alt="游戏时刻">
+            <div class="moment-footer">
+                <span class="timestamp">${moment.timestamp}</span>
+                <button class="like-btn" onclick="likeMoment(${moment.id})">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span class="like-count">${moment.likes}</span>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 点赞功能
+function likeMoment(id) {
+    const moment = gameMoments.find(m => m.id === id);
+    if (moment) {
+        moment.likes++;
+        updateMomentsDisplay();
+    }
+}
+
 // 处理玩家选择
 async function handleChoice(choice) {
     if (gameState.isProcessing) return;
@@ -97,6 +167,9 @@ async function handleChoice(choice) {
 
             // 显示狡辩区域
             document.querySelector('.argue-box').style.display = 'flex';
+
+            // 显示分享按钮
+            document.querySelector('.share-box').style.display = 'block';
 
             gameState.isProcessing = false;
             playerHint = ''; // 清空提示

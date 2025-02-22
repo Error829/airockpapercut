@@ -190,6 +190,90 @@ body {
     transform: translateY(0);
 }
 
+/* 分享相关样式 */
+.share-box {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+    background: var(--secondary-color);
+}
+
+.share-icon {
+    margin-right: 4px;
+}
+
+.share-wall {
+    margin-top: 40px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.share-wall h3 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.moments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.moment-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.moment-card:hover {
+    transform: translateY(-5px);
+}
+
+.moment-image {
+    width: 100%;
+    height: auto;
+}
+
+.moment-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+}
+
+.like-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.like-btn:hover {
+    color: var(--primary-color);
+}
+
+.like-count {
+    font-size: 14px;
+}
+
 @keyframes fadeIn {
     to {
         opacity: 1;
